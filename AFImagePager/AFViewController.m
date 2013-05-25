@@ -7,6 +7,7 @@
 //
 
 #import "AFViewController.h"
+#import "AFElement.h"
 
 @interface AFViewController () <AFImagePagerDelegate, AFImagePagerDataSource>
 {
@@ -37,12 +38,15 @@
 }
 
 #pragma mark - AFImagePager DataSource
-- (NSArray *) arrayWithImageUrlStrings
+- (NSArray *) arrayWithAFElements
 {
+    
+    AFElement * element1 = [[AFElement alloc] initWithText:@"Test 1" imageUrl:@"https://raw.github.com/kimar/tapebooth/master/Screenshots/Screen1.png"];
+    AFElement * element2 = [[AFElement alloc] initWithText:@"Test 2" imageUrl:@"https://raw.github.com/kimar/tapebooth/master/Screenshots/Screen2.png"];
+    AFElement * element3 = [[AFElement alloc] initWithText:@"Test 3" imageUrl:@"https://raw.github.com/kimar/tapebooth/master/Screenshots/Screen3.png"];
+    
     return [NSArray arrayWithObjects:
-            @"https://raw.github.com/kimar/tapebooth/master/Screenshots/Screen1.png",
-            @"https://raw.github.com/kimar/tapebooth/master/Screenshots/Screen2.png",
-            @"https://raw.github.com/kimar/tapebooth/master/Screenshots/Screen3.png",
+           element1, element2, element3,
             nil];
 }
 

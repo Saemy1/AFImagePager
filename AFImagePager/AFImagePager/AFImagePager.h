@@ -10,13 +10,13 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "UIImageView+AFNetworking.h"
-
+#import "AFElement.h"
 @class AFImagePager;
 
 @protocol AFImagePagerDataSource<NSObject>
 
 @required
-- (NSArray *) arrayWithImageUrlStrings;
+- (NSArray *) arrayWithAFElements;
 - (UIViewContentMode) contentModeForImage:(NSUInteger)image;
 
 @optional

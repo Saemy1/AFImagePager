@@ -11,6 +11,7 @@
 #define kOverlayHeight      15
 
 #import "AFImagePager.h"
+#import "AFElement.h"
 
 @interface AFImagePager () <UIScrollViewDelegate>
 {
@@ -139,20 +140,24 @@
 
 - (void) loadData
 {
-    NSArray *aImageUrls = (NSArray *)[_dataSource arrayWithImageUrlStrings];
-    if([aImageUrls count] > 0)
+    
+    NSArray *aAFElements = (NSArray *)[_dataSource arrayWithAFElements];
+    if([aAFElements count] > 0)
     {
-        [_scrollView setContentSize:CGSizeMake(_scrollView.frame.size.width * [aImageUrls count],
+        [_scrollView setContentSize:CGSizeMake(_scrollView.frame.size.width * [aAFElements count],
                                                _scrollView.frame.size.height)];
         
-        for (int i = 0; i < [aImageUrls count]; i++)
+        for (int i = 0; i < [aAFElements count]; i++)
         {
+            
+            AFElement * element = [aAFElements objectAtIndex:i];
+            
             CGRect imageFrame = CGRectMake(_scrollView.frame.size.width * i, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageFrame];
             [imageView setBackgroundColor:[UIColor clearColor]];
             [imageView setContentMode:[_dataSource contentModeForImage:i]];
             [imageView setTag:i];
-            [imageView setImageWithURL:[NSURL URLWithString:(NSString *)[aImageUrls objectAtIndex:i]]];
+            [imageView setImageWithURL:[NSURL URLWithString:(NSString *)element.imageUrl]];
             
             // Add GestureRecognizer to ImageView
             UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc]
@@ -162,12 +167,19 @@
             [imageView addGestureRecognizer:singleTapGestureRecognizer];
             [imageView setUserInteractionEnabled:YES];
             
+            
+            CGRect textFrame = CGRectMake(_scrollView.frame.size.width * i, 3*(_scrollView.frame.size.height/4), _scrollView.frame.size.width, _scrollView.frame.size.height/4);
+            UILabel *textLabel = [[UILabel alloc] initWithFrame:textFrame];
+            [textLabel setText:element.text];
+            [textLabel setBackgroundColor:[UIColor colorWithRed:66 green:66 blue:66 alpha:0.5]];
             [_scrollView addSubview:imageView];
+            [_scrollView addSubview:textLabel];
+            
         }
         
-        [_countLabel setText:[NSString stringWithFormat:@"%d", [[_dataSource arrayWithImageUrlStrings] count]]];
-        _pageControl.numberOfPages = [(NSArray *)[_dataSource arrayWithImageUrlStrings] count];
-        _pageControl.hidden = ([(NSArray *)[_dataSource arrayWithImageUrlStrings] count] > 0?NO:YES);
+        [_countLabel setText:[NSString stringWithFormat:@"%d", [[_dataSource arrayWithAFElements] count]]];
+        _pageControl.numberOfPages = [(NSArray *)[_dataSource arrayWithAFElements] count];
+        _pageControl.hidden = ([(NSArray *)[_dataSource arrayWithAFElements] count] > 0?NO:YES);
     }
     else
     {
